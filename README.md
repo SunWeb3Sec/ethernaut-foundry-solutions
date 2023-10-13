@@ -1,4 +1,4 @@
-# ethernaut-foundry
+# ethernaut-foundry-solution
 Remember to change your instanceaddress
 
 ### Fork testing (Sepolia)
